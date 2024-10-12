@@ -73,8 +73,8 @@ _deps = [
     'librosa==0.10.0.post2',
     'numpy==1.26.4',
     'opencv-python-headless',
-    'timm==0.6.13',
-    'transformers==4.40.2',
+    'timm>=1.0.3',
+    'transformers==4.44.2',
     'omegaconf==2.3.0',
     'aiohttp==3.9.3',
     'psutil==5.9.6',
@@ -82,7 +82,7 @@ _deps = [
     'streamlit==1.27.2',
     'torchsde>=0.2.5',
     'fastapi>=0.100.0',
-    'diffusers==0.27.2',
+    'diffusers==0.30.3',
     'accelerate==0.29.3',
     'python-decouple>=3.8',
     'mutagen>=1.47.0',
@@ -242,7 +242,7 @@ extras['dev'] = deps_list('pytest', 'ruff', 'pylint', 'syrupy', 'pytest-cov', 'c
 
 setup(
     name="deforum",
-    version="0.01.8.dev1",  # expected format is one of x.y.z.dev0, or x.y.z.rc1 or x.y.z (no to dashes, yes to dots)
+    version="0.01.8.dev2",  # expected format is one of x.y.z.dev0, or x.y.z.rc1 or x.y.z (no to dashes, yes to dots)
     description="State-of-the-art Animation Diffusion in PyTorch and TRT.",
     long_description=open("README.md", "r", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
