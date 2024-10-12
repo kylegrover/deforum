@@ -192,8 +192,8 @@
     },
     "depth_algorithm": {
       "widget_type": "dropdown",
-      "options": ["Midas+AdaBins (old)", "Zoe+AdaBins (old)", "Midas-3-Hybrid", "AdaBins", "Zoe", "Leres", "Depth-Anything"],
-      "default": "Midas-3-Hybrid",
+      "options": ["Apple Depth Pro","Midas+AdaBins (old)", "Zoe+AdaBins (old)", "Midas-3-Hybrid", "AdaBins", "Zoe", "Leres", "Depth-Anything"],
+      "default": "Apple Depth Pro",
       "label": "Depth Algorithm"
     },
     "midas_weight": {

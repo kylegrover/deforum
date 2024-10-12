@@ -17,6 +17,7 @@ from .depth_midas import MidasDepth
 from .depth_zoe import ZoeDepth
 from .depth_leres import LeReSDepth
 from .depth_adabins import AdaBinsModel
+from .depth_apple_pro import AppleDepthPro 
 
 
 class DepthModel:
@@ -60,6 +61,7 @@ class DepthModel:
 
     def _initialize_model(self):
         depth_algo = self.depth_algorithm.lower()
+        print(f"Initializing Depth Model: {depth_algo}")
         if depth_algo.startswith('zoe'):
             self.zoe_depth = ZoeDepth(self.Width, self.Height)
             if depth_algo == 'zoe+adabins (old)':
@@ -83,6 +85,8 @@ class DepthModel:
             self.image_processor = AutoImageProcessor.from_pretrained("nielsr/depth-anything-small")
             from transformers import AutoModelForDepthEstimation
             self.model = AutoModelForDepthEstimation.from_pretrained("nielsr/depth-anything-small").to(self.device)
+        elif depth_algo == 'apple depth pro':
+            self.apple_depth_pro = AppleDepthPro(self.models_path, self.device, half_precision=self.half_precision)
         else:
             raise Exception(f"Unknown depth_algorithm: {self.depth_algorithm}")
     @torch.no_grad()
@@ -124,6 +128,8 @@ class DepthModel:
                 # align_corners=False,
             )[0]
             # depth_tensor = -depth_tensor
+        elif self.depth_algorithm.lower() == 'apple depth pro':
+            depth_tensor = self.apple_depth_pro.predict(prev_img_cv2, half_precision)
         else:  # Unknown!
             raise Exception(f"Unknown depth_algorithm passed to depth.predict function: {self.depth_algorithm}")
 

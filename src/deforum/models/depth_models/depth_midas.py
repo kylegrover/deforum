@@ -1,9 +1,7 @@
 import os
-import platform
 
 import cv2
 import torch
-import gc
 import numpy as np
 from .midas.dpt_depth import DPTDepthModel
 from .midas.transforms import Resize, NormalizeImage, PrepareForNet
