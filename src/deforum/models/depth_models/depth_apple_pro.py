@@ -17,16 +17,17 @@ class AppleDepthPro:
         self.model_checksum = '3eb35ca68168ad3d14cb150f8947a4edf85589941661fdb2686259c80685c0ce'
         self.model_url = 'https://huggingface.co/apple/DepthPro/resolve/main/depth_pro.pt?download=true'
         
-        self.resize_px = 512  # Adjust based on Apple DepthPro requirements
-        
         self.transform = T.Compose([
-            T.Resize((self.resize_px, self.resize_px)),
             T.ToTensor(),
             T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
         
-        download_file_with_checksum(url=self.model_url, expected_checksum=self.model_checksum, 
-                                    dest_folder=models_path, dest_filename=self.model_filename)
+        download_file_with_checksum(
+            url=self.model_url,
+            expected_checksum=self.model_checksum,
+            dest_folder=models_path,
+            dest_filename=self.model_filename
+        )
         
         self.load_model(models_path, self.model_filename)
         if half_precision:
@@ -51,7 +52,7 @@ class AppleDepthPro:
             img_input = img_input.half()
         
         with torch.no_grad():
-            prediction = self.model.infer(img_input) # optional: f_px = focal length
+            prediction = self.model.infer(img_input)  # optional: f_px = focal length
             depth = prediction["depth"]  # Depth in [m]
             print(f"Raw depth shape: {depth.shape}")
             
@@ -61,16 +62,8 @@ class AppleDepthPro:
             elif depth.dim() == 3:
                 depth = depth.unsqueeze(0)  # Add batch dimension
             print(f"Adjusted depth shape: {depth.shape}")
-            
-            depth_tensor = torch.nn.functional.interpolate(
-                depth,
-                size=prev_img_cv2.shape[:2],
-                mode="bicubic",
-                align_corners=False,
-            ).squeeze(1).to(self.device)
-            print(f"Final depth tensor shape: {depth_tensor.shape}")
         
-        return depth_tensor.detach().clone()
+        return depth.squeeze().detach().clone()
 
     def to(self, device):
         self.device = device
